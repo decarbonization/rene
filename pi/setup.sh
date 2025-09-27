@@ -39,5 +39,5 @@ git clone https://github.com/adafruit/Raspberry-Pi-Installer-Scripts.git
 # Run Adafruit installer script
 echo "- Running Adafruit installer, device will reboot"
 cd Raspberry-Pi-Installer-Scripts
-sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=28c --rotation=90 --install-type=mirror --reboot=yes
+sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=28c --rotation=0 --install-type=mirror --reboot=yes
 
