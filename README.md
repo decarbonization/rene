@@ -8,6 +8,18 @@ A [Magritte](https://github.com/decarbonization/magritte) front end that runs on
 - [Adafruit PiTFT Plus 320x240 2.8" TFT + Capacitive Touchscreen](https://www.adafruit.com/product/2423)
 - An SD card with a capacity of at least 128 GB
 
+### For Battery Power
+
+- [PowerBoost 1000 Charger - Rechargeable 5V Lipo USB Boost @ 1A - 1000C](https://www.adafruit.com/product/2465)
+- [Lithium Ion Cylindrical Battery - 3.7v 2200mAh](https://www.adafruit.com/product/1781)
+
+### Optional
+
+- [Breadboard-friendly SPDT Slide Switch](https://www.adafruit.com/product/805): To be able to turn off raspi without unplugging it from the PowerBoost 1000
+- [Terminal Block - 2-pin 3.5mm - pack of 5!](https://www.adafruit.com/product/724): To be able to easily tap into +5V and GND from the PowerBoost 1000
+- [Silicone Cover Stranded-Core Wire - 26AWG in Various Colors](https://www.adafruit.com/product/1970): To be able to solder the low battery sense pin to the raspi
+- [USB OTG Host Cable - MicroB OTG male to A female](https://www.adafruit.com/product/1099): To be able to connect a keyboard and/or DAC to the raspi
+
 ## Prerequisites
 
 - Install the PiTFT Plus touchscreen onto the Raspberry Pi Zero 2 W
