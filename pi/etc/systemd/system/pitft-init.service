@@ -1,0 +1,12 @@
+[Unit]
+Description=PiTFT Initialization
+After=pigpiod.service
+Requires=pigpiod.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pitft-init.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=PiTFT Deinitialization
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+Requires=pigpiod.service
+After=pigpiod.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pitft-deinit.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target

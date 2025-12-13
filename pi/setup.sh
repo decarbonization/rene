@@ -46,3 +46,8 @@ sudo apt-get install pigpio python3-pigpio
 sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
 
+# TODO: emit these to /boot/firmware/config.txt
+# # Splash isn't visible / no need for delay
+# disable_splash=1
+# boot_delay=0
+
