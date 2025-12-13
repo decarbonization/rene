@@ -41,3 +41,8 @@ echo "- Running Adafruit installer, device will reboot"
 cd Raspberry-Pi-Installer-Scripts
 sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=28c --rotation=0 --install-type=mirror --reboot=yes
 
+# Install pigpio to be able to control screen backlight
+sudo apt-get install pigpio python3-pigpio
+sudo systemctl enable pigpiod
+sudo systemctl start pigpiod
+
