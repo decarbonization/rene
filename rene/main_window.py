@@ -1,0 +1,108 @@
+from typing import override
+
+from gi.repository import Gtk, WebKit
+
+import rene.config
+
+
+class MainWindow(Gtk.ApplicationWindow):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.set_title("Rene")
+        self.set_size_request(800, 600)
+        self.maximize()
+
+        self.web_view = WebKit.WebView()
+
+        web_view_settings = self.web_view.get_settings()
+        web_view_settings.set_enable_back_forward_navigation_gestures(True)
+        web_view_settings.set_enable_developer_extras(True)
+        web_view_settings.set_enable_media(True)
+        web_view_settings.set_media_playback_requires_user_gesture(False)
+        web_view_settings.set_enable_encrypted_media(True)
+
+        self.web_view.connect("close", lambda _web_view, _frame: self.close())
+        self.web_view.connect("load-changed", self._on_load_changed)
+        self.web_view.connect(
+            "notify::title",
+            lambda _web_view, _frame: self.set_title(
+                f"Rene - {self.web_view.get_title()}"
+            ),
+        )
+
+        self.set_child(self.web_view)
+
+        navigation_bar = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=6,
+            margin_top=2,
+            margin_start=2,
+            margin_bottom=2,
+            margin_end=2,
+        )
+
+        back_button = Gtk.Button(label="Back", icon_name="go-previous-symbolic")
+        back_button.connect("clicked", lambda _button: self.web_view.go_back())
+        self.web_view.connect(
+            "notify::can-go-back",
+            lambda web_view, _frame: back_button.set_sensitive(web_view.can_go_back()),
+        )
+        navigation_bar.append(back_button)
+
+        forward_button = Gtk.Button(label="Forward", icon_name="go-next-symbolic")
+        forward_button.connect("clicked", lambda _button: self.web_view.go_forward())
+        self.web_view.connect(
+            "notify::can-go-forward",
+            lambda web_view, _frame: forward_button.set_sensitive(
+                web_view.can_go_forward()
+            ),
+        )
+        navigation_bar.append(forward_button)
+
+        self._stop_reload_button = Gtk.Button(
+            label="Reload", icon_name="view-refresh-symbolic"
+        )
+        self._stop_reload_button.connect("clicked", self._stop_reload)
+        navigation_bar.append(self._stop_reload_button)
+
+        spacer = Gtk.Box()
+        spacer.set_hexpand(True)
+        navigation_bar.append(spacer)
+
+        title = Gtk.Label(label=self.get_title() or "")
+        self.connect(
+            "notify::title", lambda window, _pspec: title.set_label(window.get_title())
+        )
+        navigation_bar.append(title)
+
+        spacer = Gtk.Box()
+        spacer.set_hexpand(True)
+        navigation_bar.append(spacer)
+
+        quit_button = Gtk.Button(label="Quit", icon_name="application-exit-symbolic")
+        quit_button.connect("clicked", lambda _button: self.close())
+        navigation_bar.append(quit_button)
+
+        self.set_titlebar(navigation_bar)
+
+    @override
+    def present(self) -> None:
+        if not self.web_view.get_uri():
+            self.web_view.load_uri(rene.config.SERVER)
+
+        return super().present()
+
+    def _stop_reload(self, _button: Gtk.Button):
+        if self.web_view.is_loading():
+            self.web_view.stop_loading()
+        else:
+            self.web_view.reload()
+
+    def _on_load_changed(self, web_view: WebKit.WebView, load_event: WebKit.LoadEvent):
+        if load_event == WebKit.LoadEvent.STARTED:
+            self._stop_reload_button.set_label("Stop")
+            self._stop_reload_button.set_icon_name("process-stop-symbolic")
+        elif load_event == WebKit.LoadEvent.FINISHED:
+            self._stop_reload_button.set_label("Reload")
+            self._stop_reload_button.set_icon_name("view-refresh-symbolic")

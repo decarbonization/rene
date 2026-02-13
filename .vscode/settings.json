@@ -1,0 +1,15 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.ruff": "always",
+    },
+    "editor.formatOnSave": true,
+    "python.defaultInterpreterPath": ".venv/bin/python",
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.testing.cwd": "${workspaceFolder}/",
+    "ty.interpreter": ["${workspaceFolder}/.venv/bin/python"],
+    "ty.inlayHints.callArgumentNames": false,
+    "ty.inlayHints.variableTypes": false,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+    },
+}

@@ -1,0 +1,53 @@
+#!/bin/sh
+
+if ! command -v asdf >/dev/null 2>&1; then
+    echo "Error: asdf not installed. Install <https://asdf-vm.com/> to continue." >&2
+    exit 1
+fi
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Installing dependencies, you will be prompted for your password"
+    if command -v pacman >/dev/null 2>&1; then
+        sudo pacman -S cairo \
+                       pkgconf \
+                       gobject-introspection \
+                       gtk4 \
+                       webkitgtk-6.0 \
+                       gstreamer \
+                       gst-libav
+    elif command -v apt >/dev/null 2>&1; then
+        sudo apt install libgirepository-2.0-dev \
+                         gcc \
+                         libcairo2-dev \
+                         pkg-config \
+                         python3-dev \
+                         gir1.2-gtk-4.0 \
+                         libwebkit2gtk \
+                         gstreamer1.0-plugins-base \
+                         gstreamer1.0-libav
+    else
+        echo "Error: Unsupported Linux distribution"
+        exit 1
+    fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Error: homebrew not installed. Install <https://brew.sh/> to continue." >&2
+        exit 1
+    fi
+    brew install pygobject3 gtk4 webkitgtk
+else
+    echo "Error: Unsupported operating system"
+    exit 1
+fi
+
+set -e
+
+# Add all required asdf plugins
+asdf plugin add just
+asdf plugin add uv
+
+# Install project tooling
+asdf install
+
+# Set up dependencies
+just sync-deps
