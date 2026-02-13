@@ -10,7 +10,7 @@ class MainWindow(Gtk.ApplicationWindow):
         super().__init__(**kwargs)
 
         self.set_title("Rene")
-        self.set_size_request(800, 600)
+        self.set_size_request(400, 300)
         self.maximize()
 
         self.web_view = WebKit.WebView()
