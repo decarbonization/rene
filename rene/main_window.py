@@ -33,13 +33,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.set_child(self.web_view)
 
-        navigation_bar = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            spacing=6,
-            margin_top=2,
-            margin_start=2,
-            margin_bottom=2,
-            margin_end=2,
+        navigation_bar = Gtk.HeaderBar(
+            name=self.get_title() or "",
+        )
+        self.connect(
+            "notify::title",
+            lambda window, _pspec: navigation_bar.set_name(window.get_title()),
         )
 
         back_button = Gtk.Button(label="Back", icon_name="go-previous-symbolic")
@@ -48,7 +47,7 @@ class MainWindow(Gtk.ApplicationWindow):
             "notify::can-go-back",
             lambda web_view, _frame: back_button.set_sensitive(web_view.can_go_back()),
         )
-        navigation_bar.append(back_button)
+        navigation_bar.pack_start(back_button)
 
         forward_button = Gtk.Button(label="Forward", icon_name="go-next-symbolic")
         forward_button.connect("clicked", lambda _button: self.web_view.go_forward())
@@ -58,31 +57,13 @@ class MainWindow(Gtk.ApplicationWindow):
                 web_view.can_go_forward()
             ),
         )
-        navigation_bar.append(forward_button)
+        navigation_bar.pack_start(forward_button)
 
         self._stop_reload_button = Gtk.Button(
             label="Reload", icon_name="view-refresh-symbolic"
         )
         self._stop_reload_button.connect("clicked", self._stop_reload)
-        navigation_bar.append(self._stop_reload_button)
-
-        spacer = Gtk.Box()
-        spacer.set_hexpand(True)
-        navigation_bar.append(spacer)
-
-        title = Gtk.Label(label=self.get_title() or "")
-        self.connect(
-            "notify::title", lambda window, _pspec: title.set_label(window.get_title())
-        )
-        navigation_bar.append(title)
-
-        spacer = Gtk.Box()
-        spacer.set_hexpand(True)
-        navigation_bar.append(spacer)
-
-        quit_button = Gtk.Button(label="Quit", icon_name="application-exit-symbolic")
-        quit_button.connect("clicked", lambda _button: self.close())
-        navigation_bar.append(quit_button)
+        navigation_bar.pack_start(self._stop_reload_button)
 
         self.set_titlebar(navigation_bar)
 
