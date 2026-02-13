@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if ! command -v asdf >/dev/null 2>&1; then
     echo "Error: asdf not installed. Install <https://asdf-vm.com/> to continue." >&2
@@ -8,6 +8,7 @@ fi
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Installing dependencies, you will be prompted for your password"
     if command -v pacman >/dev/null 2>&1; then
+	# Arch Linux
         sudo pacman -S cairo \
                        pkgconf \
                        gobject-introspection \
@@ -16,13 +17,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
                        gstreamer \
                        gst-libav
     elif command -v apt >/dev/null 2>&1; then
+	# Raspberry Pi OS
         sudo apt install libgirepository-2.0-dev \
                          gcc \
                          libcairo2-dev \
                          pkg-config \
                          python3-dev \
                          gir1.2-gtk-4.0 \
-                         libwebkit2gtk \
+                         libwebkitgtk-6.0-dev \
                          gstreamer1.0-plugins-base \
                          gstreamer1.0-libav
     else
@@ -51,3 +53,4 @@ asdf install
 
 # Set up dependencies
 just sync-deps
+
