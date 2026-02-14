@@ -1,6 +1,7 @@
+import os
 from typing import override
 
-from gi.repository import Gtk, WebKit
+from gi.repository import Gio, Gtk, WebKit
 
 import rene.config
 
@@ -65,6 +66,24 @@ class MainWindow(Gtk.ApplicationWindow):
         self._stop_reload_button.connect("clicked", self._stop_reload)
         navigation_bar.pack_start(self._stop_reload_button)
 
+        reboot_action = Gio.SimpleAction(name="reboot")
+        reboot_action.connect("activate", self._reboot)
+        self.add_action(reboot_action)
+
+        poweroff_action = Gio.SimpleAction(name="poweroff")
+        poweroff_action.connect("activate", self._poweroff)
+        self.add_action(poweroff_action)
+
+        menu_button = Gtk.MenuButton(
+            label="Menu",
+            icon_name="open-menu-symbolic",
+        )
+        menu_model = Gio.Menu()
+        menu_model.append("Reboot", "win.reboot")
+        menu_model.append("Shut Down", "win.poweroff")
+        menu_button.set_menu_model(menu_model)
+        navigation_bar.pack_end(menu_button)
+
         self.set_titlebar(navigation_bar)
 
     @override
@@ -79,6 +98,12 @@ class MainWindow(Gtk.ApplicationWindow):
             self.web_view.stop_loading()
         else:
             self.web_view.reload()
+
+    def _reboot(self, _action: Gio.Action, _):
+        os.system("systemctl reboot")
+
+    def _poweroff(self, _action: Gio.Action, _):
+        os.system("systemctl poweroff")
 
     def _on_load_changed(self, web_view: WebKit.WebView, load_event: WebKit.LoadEvent):
         if load_event == WebKit.LoadEvent.STARTED:
