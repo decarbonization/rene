@@ -9,7 +9,7 @@ from rene.keyboards.base import Keyboard
 class Wvkbd(Keyboard):
     def __init__(self):
         pid = next(
-            (item.pid for item in psutil.process_iter() if item.name() == "wvkbd"), None
+            (item.pid for item in psutil.process_iter() if item.name() == "wvkbd-mobintl"), None
         )
         if pid is None:
             raise RuntimeError("wvkbd is not running")
