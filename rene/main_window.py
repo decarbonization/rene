@@ -21,7 +21,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.web_view = WebKit.WebView()
 
         web_view_settings = self.web_view.get_settings()
-        web_view_settings.set_enable_back_forward_navigation_gestures(True)
+        web_view_settings.set_enable_back_forward_navigation_gestures(False)
         web_view_settings.set_enable_developer_extras(True)
         web_view_settings.set_enable_media(True)
         web_view_settings.set_media_playback_requires_user_gesture(False)
